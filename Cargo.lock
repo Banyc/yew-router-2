@@ -367,6 +367,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
+name = "nested_router"
+version = "0.1.0"
+source = "git+https://github.com/Banyc/nested_router#384902700e0092248ba08e4e7c954610f668aadd"
+dependencies = [
+ "route-recognizer",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -734,21 +742,11 @@ version = "0.1.0"
 dependencies = [
  "gloo",
  "js-sys",
- "route-recognizer",
+ "nested_router",
  "serde",
  "serde_urlencoded",
  "tracing",
  "wasm-bindgen",
  "web-sys",
  "yew",
- "yew-router-macro",
-]
-
-[[package]]
-name = "yew-router-macro"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]

@@ -65,19 +65,13 @@
 
 extern crate self as yew_router;
 
-#[doc(hidden)]
-#[path = "macro_helpers.rs"]
-pub mod __macro;
 pub mod components;
 pub mod hooks;
 pub mod navigator;
-mod routable;
 pub mod router;
-pub mod scope_ext;
 pub mod switch;
 pub mod utils;
 
-pub use routable::{AnyRoute, Routable};
 pub use router::{BrowserRouter, HashRouter, Router};
 pub use switch::Switch;
 
@@ -99,8 +93,5 @@ pub mod prelude {
     pub use crate::history::Location;
     pub use crate::hooks::*;
     pub use crate::navigator::{NavigationError, NavigationResult, Navigator};
-    pub use crate::scope_ext::{LocationHandle, NavigatorHandle, RouterScopeExt};
-    #[doc(no_inline)]
-    pub use crate::Routable;
     pub use crate::{BrowserRouter, HashRouter, Router, Switch};
 }

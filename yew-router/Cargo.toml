@@ -7,12 +7,11 @@ edition = "2021"
 # yew = { version = "0.19.3", default-features= false }
 # yew = { version = "0.19.3" }
 yew = { version = "0.19.3", git = "https://github.com/yewstack/yew" }
-yew-router-macro = { path = "../yew-router-macro" }
 
 wasm-bindgen = "0.2"
 js-sys = "0.3"
 gloo = { version = "0.8", features = ["futures"] }
-route-recognizer = "0.3"
+nested_router = { git = "https://github.com/Banyc/nested_router" }
 serde = { version = "1", features = ["derive"] }
 serde_urlencoded = "0.7.1"
 tracing = "0.1.36"

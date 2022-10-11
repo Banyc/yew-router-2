@@ -5,20 +5,19 @@ use yew::virtual_dom::AttrValue;
 
 use crate::navigator::NavigatorKind;
 use crate::prelude::*;
-use crate::{utils, Routable};
+use crate::utils;
 
 /// Props for [`Link`]
 #[derive(Properties, Clone, PartialEq)]
-pub struct LinkProps<R, Q = ()>
+pub struct LinkProps<Q = ()>
 where
-    R: Routable,
     Q: Clone + PartialEq + Serialize,
 {
     /// CSS classes to add to the anchor element (optional).
     #[prop_or_default]
     pub classes: Classes,
     /// Route that will be pushed when the anchor is clicked.
-    pub to: R,
+    pub to: String,
     /// Route query data
     #[prop_or_default]
     pub query: Option<Q>,
@@ -33,9 +32,8 @@ where
 
 /// A wrapper around `<a>` tag to be used with [`Router`](crate::Router)
 #[function_component]
-pub fn Link<R, Q = ()>(props: &LinkProps<R, Q>) -> Html
+pub fn Link<Q = ()>(props: &LinkProps<Q>) -> Html
 where
-    R: Routable + 'static,
     Q: Clone + PartialEq + Serialize + 'static,
 {
     let LinkProps {
@@ -71,7 +69,7 @@ where
     };
 
     let href = {
-        let route_s = to.to_path();
+        let route_s = to;
         let pathname = navigator.prefix_basename(&route_s);
         let mut path = query
             .and_then(|query| serde_urlencoded::to_string(query).ok())

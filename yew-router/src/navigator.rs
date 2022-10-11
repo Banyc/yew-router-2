@@ -3,7 +3,6 @@ use std::borrow::Cow;
 use serde::Serialize;
 
 use crate::history::{AnyHistory, History, HistoryError, HistoryResult};
-use crate::routable::Routable;
 
 pub type NavigationError = HistoryError;
 pub type NavigationResult<T> = HistoryResult<T>;
@@ -56,95 +55,76 @@ impl Navigator {
         self.inner.go(delta);
     }
 
-    /// Pushes a [`Routable`] entry.
-    pub fn push<R>(&self, route: &R)
-    where
-        R: Routable,
-    {
-        self.inner.push(self.prefix_basename(&route.to_path()));
+    pub fn push<'a>(&self, route_s: &'a str) {
+        self.inner.push(self.prefix_basename(&route_s));
     }
 
-    /// Replaces the current history entry with provided [`Routable`] and [`None`] state.
-    pub fn replace<R>(&self, route: &R)
-    where
-        R: Routable,
-    {
-        self.inner.replace(self.prefix_basename(&route.to_path()));
+    pub fn replace<'a>(&self, route_s: &'a str) {
+        self.inner.replace(self.prefix_basename(&route_s));
     }
 
-    /// Pushes a [`Routable`] entry with state.
-    pub fn push_with_state<R, T>(&self, route: &R, state: T)
+    pub fn push_with_state<'a, T>(&self, route_s: &'a str, state: T)
     where
-        R: Routable,
         T: 'static,
     {
         self.inner
-            .push_with_state(self.prefix_basename(&route.to_path()), state);
+            .push_with_state(self.prefix_basename(&route_s), state);
     }
 
-    /// Replaces the current history entry with provided [`Routable`] and state.
-    pub fn replace_with_state<R, T>(&self, route: &R, state: T)
+    pub fn replace_with_state<'a, T>(&self, route_s: &'a str, state: T)
     where
-        R: Routable,
         T: 'static,
     {
         self.inner
-            .replace_with_state(self.prefix_basename(&route.to_path()), state);
+            .replace_with_state(self.prefix_basename(&route_s), state);
     }
 
     /// Same as `.push()` but affix the queries to the end of the route.
-    pub fn push_with_query<R, Q>(&self, route: &R, query: &Q) -> NavigationResult<()>
+    pub fn push_with_query<'a, Q>(&self, route_s: &'a str, query: &Q) -> NavigationResult<()>
     where
-        R: Routable,
         Q: Serialize,
     {
         self.inner
-            .push_with_query(self.prefix_basename(&route.to_path()), query)
+            .push_with_query(self.prefix_basename(&route_s), query)
     }
 
     /// Same as `.replace()` but affix the queries to the end of the route.
-    pub fn replace_with_query<R, Q>(&self, route: &R, query: &Q) -> NavigationResult<()>
+    pub fn replace_with_query<'a, Q>(&self, route_s: &'a str, query: &Q) -> NavigationResult<()>
     where
-        R: Routable,
         Q: Serialize,
     {
         self.inner
-            .replace_with_query(self.prefix_basename(&route.to_path()), query)
+            .replace_with_query(self.prefix_basename(&route_s), query)
     }
 
     /// Same as `.push_with_state()` but affix the queries to the end of the route.
-    pub fn push_with_query_and_state<R, Q, T>(
+    pub fn push_with_query_and_state<'a, Q, T>(
         &self,
-        route: &R,
+        route_s: &'a str,
         query: &Q,
         state: T,
     ) -> NavigationResult<()>
     where
-        R: Routable,
         Q: Serialize,
         T: 'static,
     {
         self.inner
-            .push_with_query_and_state(self.prefix_basename(&route.to_path()), query, state)
+            .push_with_query_and_state(self.prefix_basename(&route_s), query, state)
     }
 
     /// Same as `.replace_with_state()` but affix the queries to the end of the route.
-    pub fn replace_with_query_and_state<R, Q, T>(
+    pub fn replace_with_query_and_state<'a, Q, T>(
         &self,
-        route: &R,
+        route_s: &'a str,
         query: &Q,
         state: T,
     ) -> NavigationResult<()>
     where
-        R: Routable,
         Q: Serialize,
         T: 'static,
     {
-        self.inner.replace_with_query_and_state(
-            self.prefix_basename(&route.to_path()),
-            query,
-            state,
-        )
+        self.inner
+            .replace_with_query_and_state(self.prefix_basename(&route_s), query, state)
     }
 
     /// Returns the Navigator kind.
@@ -169,21 +149,21 @@ impl Navigator {
         }
     }
 
-    pub(crate) fn strip_basename<'a>(&self, path: Cow<'a, str>) -> Cow<'a, str> {
-        match self.basename() {
-            Some(m) => {
-                let mut path = path
-                    .strip_prefix(m)
-                    .map(|m| Cow::from(m.to_owned()))
-                    .unwrap_or(path);
+    // pub(crate) fn strip_basename<'a>(&self, path: Cow<'a, str>) -> Cow<'a, str> {
+    //     match self.basename() {
+    //         Some(m) => {
+    //             let mut path = path
+    //                 .strip_prefix(m)
+    //                 .map(|m| Cow::from(m.to_owned()))
+    //                 .unwrap_or(path);
 
-                if !path.starts_with('/') {
-                    path = format!("/{}", m).into();
-                }
+    //             if !path.starts_with('/') {
+    //                 path = format!("/{}", m).into();
+    //             }
 
-                path
-            }
-            None => path,
-        }
-    }
+    //             path
+    //         }
+    //         None => path,
+    //     }
+    // }
 }
