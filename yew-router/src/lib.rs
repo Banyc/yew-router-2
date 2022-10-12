@@ -4,26 +4,33 @@
 //! # Usage
 //!
 //! ```rust
-//! use yew::functional::*;
 //! use yew::prelude::*;
 //! use yew_router::prelude::*;
 //!
-//! #[derive(Debug, Clone, Copy, PartialEq, Routable)]
-//! enum Route {
-//!     #[at("/")]
-//!     Home,
-//!     #[at("/secure")]
-//!     Secure,
-//!     #[not_found]
-//!     #[at("/404")]
-//!     NotFound,
+//! fn routes() -> RouteList {
+//!     RouteList {
+//!         routes: vec![
+//!             Route {
+//!                 path: "".to_string(),
+//!                 next_routes: None,
+//!             },
+//!             Route {
+//!                 path: "secure".to_string(),
+//!                 next_routes: None,
+//!             },
+//!             Route {
+//!                 path: "*".to_string(),
+//!                 next_routes: None,
+//!             },
+//!         ],
+//!     }
 //! }
 //!
 //! #[function_component(Secure)]
 //! fn secure() -> Html {
 //!     let navigator = use_navigator().unwrap();
 //!
-//!     let onclick_callback = Callback::from(move |_| navigator.push(&Route::Home));
+//!     let onclick_callback = Callback::from(move |_| navigator.push("../home"));
 //!     html! {
 //!         <div>
 //!             <h1>{ "Secure" }</h1>
@@ -34,20 +41,27 @@
 //!
 //! #[function_component(Main)]
 //! fn app() -> Html {
+//!     let routes = routes();
+//!     let pathname = use_location().unwrap().path().clone();
+//!
 //!     html! {
 //!         <BrowserRouter>
-//!             <Switch<Route> render={switch} />
+//!             <Switch routes={ routes } render={ switch } pathname={ pathname } />
 //!         </BrowserRouter>
 //!     }
 //! }
 //!
-//! fn switch(routes: Route) -> Html {
-//!     match routes {
-//!         Route::Home => html! { <h1>{ "Home" }</h1> },
-//!         Route::Secure => html! {
-//!             <Secure />
-//!         },
-//!         Route::NotFound => html! { <h1>{ "404" }</h1> },
+//! fn switch(out: RouteOutput) -> Html {
+//!     let RouteOutput {
+//!         sub_path,
+//!         route,
+//!         params,
+//!     } = out;
+//!
+//!     match &route.path {
+//!         "" => html! { <h1>{ "Home" }</h1> },
+//!         "secure" => html! { <Secure /> },
+//!         _ => html! { <h1>{ "404" }</h1> },
 //!     }
 //! }
 //! ```
@@ -93,5 +107,7 @@ pub mod prelude {
     pub use crate::history::Location;
     pub use crate::hooks::*;
     pub use crate::navigator::{NavigationError, NavigationResult, Navigator};
+    pub use crate::switch::RouteOutput;
     pub use crate::{BrowserRouter, HashRouter, Router, Switch};
+    pub use nested_router::{Route, RouteList};
 }

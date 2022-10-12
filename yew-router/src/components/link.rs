@@ -31,8 +31,8 @@ where
 }
 
 /// A wrapper around `<a>` tag to be used with [`Router`](crate::Router)
-#[function_component]
-pub fn Link<Q = ()>(props: &LinkProps<Q>) -> Html
+#[function_component(Link)]
+pub fn link<Q = ()>(props: &LinkProps<Q>) -> Html
 where
     Q: Clone + PartialEq + Serialize + 'static,
 {
