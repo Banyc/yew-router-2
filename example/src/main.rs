@@ -24,7 +24,7 @@ fn routes() -> RouteList {
 fn secure() -> Html {
     let navigator = use_navigator().unwrap();
 
-    let onclick_callback = Callback::from(move |_| navigator.push("../home"));
+    let onclick_callback = Callback::from(move |_| navigator.push("../"));
     html! {
         <div>
             <h1>{ "Secure" }</h1>
