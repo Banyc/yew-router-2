@@ -34,9 +34,9 @@ fn secure() -> Html {
 }
 
 #[function_component(Main)]
-fn app() -> Html {
+fn main() -> Html {
     let routes = routes();
-    let pathname = use_location().unwrap().path().to_string();
+    let pathname = use_location().unwrap().path()[1..].to_string();
 
     html! {
         <BrowserRouter>
@@ -63,6 +63,15 @@ fn switch(out: RouteOutput) -> Html {
     }
 }
 
+#[function_component(App)]
+fn app() -> Html {
+    html! {
+        <BrowserRouter>
+            <Main />
+        </BrowserRouter>
+    }
+}
+
 fn main() {
-    yew::Renderer::<Main>::new().render();
+    yew::Renderer::<App>::new().render();
 }
