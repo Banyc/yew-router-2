@@ -103,7 +103,7 @@ fn switch_main(out: RouteOutput) -> Html {
     } = out;
 
     match route.path.as_str() {
-        "" => html! { <h1>{ "Main Index" }</h1> },
+        "" => html! { <h2>{ "Main Index" }</h2> },
         "sub" => {
             html! {
                 <Sub
@@ -112,7 +112,7 @@ fn switch_main(out: RouteOutput) -> Html {
                 />
             }
         }
-        _ => html! { <h1>{ "Main 404" }</h1> },
+        _ => html! { <h2>{ "Main 404" }</h2> },
     }
 }
 
@@ -126,7 +126,5 @@ fn app() -> Html {
 }
 
 fn main() {
-    wasm_logger::init(wasm_logger::Config::default());
-
     yew::Renderer::<App>::new().render();
 }
