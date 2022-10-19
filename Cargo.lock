@@ -384,8 +384,9 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
 name = "nested_router"
-version = "0.1.0"
-source = "git+https://github.com/Banyc/nested_router#0351ca077fbdc8313d6be36c601899ad7ef04df6"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c55c5066a2af9f60436ce391d4ad1edecf7bf68a47a0dd7e4887043d4dee56e"
 dependencies = [
  "route-recognizer",
 ]

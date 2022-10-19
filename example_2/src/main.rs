@@ -1,32 +1,35 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-fn routes() -> RouteList {
-    let sub = RouteList {
-        routes: vec![
-            Route {
-                path: "".to_string(),
-                next_routes: None,
-            },
-            Route {
-                path: "*".to_string(),
-                next_routes: None,
-            },
-        ],
-    };
+fn sub_routes() -> RouteList {
     RouteList {
         routes: vec![
             Route {
                 path: "".to_string(),
-                next_routes: None,
-            },
-            Route {
-                path: "sub".to_string(),
-                next_routes: Some(sub),
+                has_sub_routes: false,
             },
             Route {
                 path: "*".to_string(),
-                next_routes: None,
+                has_sub_routes: false,
+            },
+        ],
+    }
+}
+
+fn main_routes() -> RouteList {
+    RouteList {
+        routes: vec![
+            Route {
+                path: "".to_string(),
+                has_sub_routes: false,
+            },
+            Route {
+                path: "sub".to_string(),
+                has_sub_routes: true,
+            },
+            Route {
+                path: "*".to_string(),
+                has_sub_routes: false,
             },
         ],
     }
@@ -34,12 +37,12 @@ fn routes() -> RouteList {
 
 #[derive(Properties, PartialEq, Debug)]
 struct SubProps {
-    routes: RouteList,
     sub_path: String,
 }
 
 #[function_component(Sub)]
 fn sub(props: &SubProps) -> Html {
+    let sub_routes = sub_routes();
     let navigator = use_navigator().unwrap();
 
     let onclick_callback = Callback::from(move |_| navigator.push("../"));
@@ -47,7 +50,7 @@ fn sub(props: &SubProps) -> Html {
         <div>
             <h2>{ "Sub Component" }</h2>
             <Switch
-                routes={ props.routes.clone() }
+                routes={ sub_routes.clone() }
                 render={ switch_sub }
                 pathname={ props.sub_path.clone() }
             />
@@ -59,9 +62,9 @@ fn sub(props: &SubProps) -> Html {
 
 fn switch_sub(out: RouteOutput) -> Html {
     let RouteOutput {
-        sub_path,
+        sub_path: _,
         route,
-        params,
+        params: _,
     } = out;
 
     match route.path.as_str() {
@@ -72,7 +75,7 @@ fn switch_sub(out: RouteOutput) -> Html {
 
 #[function_component(Main)]
 fn main() -> Html {
-    let routes = routes();
+    let routes = main_routes();
     let pathname = use_location().unwrap().path().to_string();
 
     // remove leading slash if present
@@ -99,7 +102,7 @@ fn switch_main(out: RouteOutput) -> Html {
     let RouteOutput {
         sub_path,
         route,
-        params,
+        params: _,
     } = out;
 
     match route.path.as_str() {
@@ -107,7 +110,6 @@ fn switch_main(out: RouteOutput) -> Html {
         "sub" => {
             html! {
                 <Sub
-                    routes={ route.next_routes.unwrap() }
                     sub_path={ sub_path.clone() }
                 />
             }

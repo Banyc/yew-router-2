@@ -6,15 +6,15 @@ fn routes() -> RouteList {
         routes: vec![
             Route {
                 path: "".to_string(),
-                next_routes: None,
+                has_sub_routes: false,
             },
             Route {
                 path: "secure".to_string(),
-                next_routes: None,
+                has_sub_routes: false,
             },
             Route {
                 path: "*".to_string(),
-                next_routes: None,
+                has_sub_routes: false,
             },
         ],
     }
@@ -51,9 +51,9 @@ fn main() -> Html {
 
 fn switch(out: RouteOutput) -> Html {
     let RouteOutput {
-        sub_path,
+        sub_path: _,
         route,
-        params,
+        params: _,
     } = out;
 
     match route.path.as_str() {
