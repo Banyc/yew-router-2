@@ -39,13 +39,11 @@ fn main() -> Html {
     let pathname = use_location().unwrap().path()[1..].to_string();
 
     html! {
-        <BrowserRouter>
-            <Switch
-                routes={ routes }
-                render={ switch }
-                pathname={ pathname }
-            />
-        </BrowserRouter>
+        <Switch
+            routes={ routes }
+            render={ switch }
+            pathname={ pathname }
+        />
     }
 }
 
