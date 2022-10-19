@@ -51,7 +51,7 @@ pub fn switch(props: &SwitchProps) -> Html {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct RouteOutput {
-    pub sub_path: Option<String>,
+    pub sub_path: String,
     pub route: Route,
     pub params: BTreeMap<String, String>,
 }
